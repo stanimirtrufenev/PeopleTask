@@ -1,0 +1,96 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+DROP DATABASE `task_database`;
+CREATE SCHEMA IF NOT EXISTS `task_database` DEFAULT CHARACTER SET utf8 ;
+USE `task_database` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`t_people`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `task_database`.`t_people` (
+  `ID` INT(10) NOT NULL AUTO_INCREMENT,
+  `FULL_NAME` VARCHAR(90) NOT NULL,
+  `PIN` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`t_addresses`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `task_database`.`t_addresses` (
+  `ID` INT(10) NOT NULL AUTO_INCREMENT,
+  `ADDR_TYPE` VARCHAR(5) NOT NULL,
+  `ADDR_INFO` VARCHAR(300) NULL DEFAULT NULL,
+  `T_PEOPLE_ID` INT(10) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC),
+  INDEX `fk_T_ADDRESSES_T_PEOPLE1_idx` (`T_PEOPLE_ID` ASC),
+  CONSTRAINT `fk_T_ADDRESSES_T_PEOPLE`
+    FOREIGN KEY (`T_PEOPLE_ID`)
+    REFERENCES `task_database`.`t_people` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`t_mails`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `task_database`.`t_mails` (
+  `ID` INT(10) NOT NULL AUTO_INCREMENT,
+  `EMAIL_TYPE` VARCHAR(5) NOT NULL,
+  `EMAIL` VARCHAR(40) NULL DEFAULT NULL,
+  `T_PEOPLE_ID` INT(10) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC),
+  INDEX `fk_T_MAILS_T_PEOPLE_idx` (`T_PEOPLE_ID` ASC),
+  CONSTRAINT `fk_T_MAILS_T_PEOPLE`
+    FOREIGN KEY (`T_PEOPLE_ID`)
+    REFERENCES `task_database`.`t_people` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+INSERT INTO `task_database`.`t_people` (`FULL_NAME`, `PIN`)
+VALUES ('Tom Bran Erichsen','1234567891'),
+	   ('Dimitar Kristiqnov Stoqnov','9871243263'),
+       ('Nikolay Gochev Dobromirov','3242343242'),
+	   ('Vanq Jekova Iliqnova','9242374523'),
+       ('Ivan Georgiev Nankov','7343413423'),
+       ('Tomislav Gospodinov Zahariev','8765412345');
+       
+INSERT INTO `task_database`.`t_mails` (`EMAIL_TYPE`, `EMAIL`,`T_PEOPLE_ID`)
+VALUES ('abv',null,1),
+	   ('gmail','dimitar.stoqnov@gmail.com',2),
+       ('yahoo','nikolay.dobromirov@yahoo.com',3),
+	   ('abv','vanq.iliqnova@abv.bg',4),
+       ('abv','ivan.nankov@abv.bg',5),
+       ('gmail',null,6);
+       
+INSERT INTO `task_database`.`t_addresses` (`ADDR_TYPE`, `ADDR_INFO`,`T_PEOPLE_ID`)
+VALUES ('HOME',null,1),
+	   ('TEMP',null,2),
+       ('HOME','Plovdiv',3),
+	   ('HOME','Burgas, bul.Hristo Botev',4),
+       ('HOME','Sofia, Krasna Polqna',5),
+       ('TEMP',null,6);
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@
